@@ -1,10 +1,15 @@
 package com.minsait.JunitControllers.models;
 
 import com.minsait.JunitControllers.exceptions.DineroInsuficienteException;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Cuenta {
     private Long id;
     private String persona;
