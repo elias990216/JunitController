@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -51,27 +52,27 @@ class JunitControllersApplicationTests {
 
     @Test
     void testFindCuentaById() {
-        when(cuentaRepository.findById(anyLong())).thenReturn(Datos.CUENTAS.get(0));
+        when(cuentaRepository.findById(anyLong())).thenReturn(Optional.ofNullable(Datos.CUENTAS.get(0)));
         assertEquals("Ana", service.findById(1L).getPersona());
     }
 
     @Test
     void testRevisarTotalTrans() {
-        when(bancoRepository.findById(anyLong())).thenReturn(Datos.BANCO);
+        when(bancoRepository.findById(anyLong())).thenReturn(Optional.of(Datos.BANCO));
         assertEquals(Datos.BANCO.getTotalTransferencias(), service.revisarTotalTransferencias(4L));
     }
 
     @Test
     void testRevisarSaldo() {
-        when(cuentaRepository.findById(anyLong())).thenReturn(Datos.CUENTA);
+        when(cuentaRepository.findById(anyLong())).thenReturn(Optional.of(Datos.CUENTA));
         assertEquals(Datos.CUENTA.getSaldo(), service.revisarSaldo(4L));
     }
 
     @Test
     void testTransferir() {
-        when(cuentaRepository.findById(1L)).thenReturn(Datos.CUENTAS.get(0));
-        when(cuentaRepository.findById(2L)).thenReturn(Datos.CUENTAS.get(1));
-        when(bancoRepository.findById(1L)).thenReturn(Datos.BANCOS.get(0));
+        when(cuentaRepository.findById(1L)).thenReturn(Optional.ofNullable(Datos.CUENTAS.get(0)));
+        when(cuentaRepository.findById(2L)).thenReturn(Optional.ofNullable(Datos.CUENTAS.get(1)));
+        when(bancoRepository.findById(1L)).thenReturn(Optional.ofNullable(Datos.BANCOS.get(0)));
         service.transferir(1L, 2L, new BigDecimal(150), 1L);
         assertAll(
                 () -> assertEquals(Datos.BANCOS.get(0).getTotalTransferencias(), 101),
