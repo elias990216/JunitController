@@ -109,5 +109,11 @@ class JunitControllersApplicationTests {
         );
     }
 
+    @Test
+    void testMain(){
+        String[] arguments = {};
+        JunitControllersApplication.main(arguments);
+    }
+
 
 }
