@@ -69,11 +69,15 @@ class JunitControllersApplicationTests {
 
     @Test
     void testTransferir() {
-        when(cuentaRepository.findById(anyLong())).thenReturn(Datos.CUENTAS.get(0));
-        when(cuentaRepository.findById(anyLong())).thenReturn(Datos.CUENTAS.get(1));
-        when(bancoRepository.findById(anyLong())).thenReturn(Datos.BANCOS.get(0));
-        service.transferir(1L, 2L, new BigDecimal(100), 1L);
-        assertEquals(Datos.CUENTAS.get(0).getSaldo(), new BigDecimal("1500.50"));
+        when(cuentaRepository.findById(1L)).thenReturn(Datos.CUENTAS.get(0));
+        when(cuentaRepository.findById(2L)).thenReturn(Datos.CUENTAS.get(1));
+        when(bancoRepository.findById(1L)).thenReturn(Datos.BANCOS.get(0));
+        service.transferir(1L, 2L, new BigDecimal(150), 1L);
+        assertAll(
+                () -> assertEquals(Datos.BANCOS.get(0).getTotalTransferencias(), 101),
+                () -> assertEquals(Datos.CUENTAS.get(0).getSaldo(), new BigDecimal("1350.50")),
+                () -> assertEquals(Datos.CUENTAS.get(1).getSaldo(), new BigDecimal("1550.50"))
+        );
     }
 
     @Test
@@ -99,10 +103,10 @@ class JunitControllersApplicationTests {
         Exception e = assertThrows(DineroInsuficienteException.class, () -> {
             cuenta.retirar(new BigDecimal(100));
         });
-		assertEquals(
-				"Dinero Insuficiente en la cuenta.",
-				e.getMessage()
-		);
+        assertEquals(
+                "Dinero Insuficiente en la cuenta.",
+                e.getMessage()
+        );
     }
 
 
